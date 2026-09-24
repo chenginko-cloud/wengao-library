@@ -3,153 +3,216 @@
 <head>
 <meta charset="utf-8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232b5cd9'/%3E%3Cg stroke='%23fff' stroke-width='4.5' stroke-linecap='round'%3E%3Cpath d='M17 21h30M17 32h30M17 43h19'/%3E%3C/g%3E%3C/svg%3E">
-
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f4f5f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>全部文稿总库 · 正在进入…</title>
+<title>全部文稿总库 · 正在选择线路…</title>
 <style>
-:root{--tx:#1f2328;--tx2:#5c6570;--tx3:#8b95a1;--line:#e5e7eb;--accent:#2b5cd9;--accent-soft:#eaf0ff}
+:root{--tx:#1f2328;--tx2:#5c6570;--tx3:#8b95a1;--line:#e5e7eb;--line2:#f0f2f5;
+  --accent:#2b5cd9;--accent-soft:#eaf0ff;--ok:#0f6e56;--bad:#b42318}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{
   background:#f4f5f7;color:var(--tx);display:flex;align-items:center;justify-content:center;
-  padding:24px;min-height:100%;
+  padding:22px;min-height:100%;
   font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
   -webkit-font-smoothing:antialiased;
 }
-.card{
-  width:100%;max-width:440px;background:#fff;border:1px solid var(--line);border-radius:16px;
-  padding:30px 26px 24px;box-shadow:0 10px 34px rgba(16,24,40,.07);text-align:center;
-}
+.card{width:100%;max-width:460px;background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:28px 24px 22px;box-shadow:0 10px 34px rgba(16,24,40,.07);text-align:center}
 .badge{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.6px;color:var(--accent);
-  background:var(--accent-soft);border-radius:999px;padding:3px 11px;margin-bottom:14px}
-h1{margin:0;font-size:21px;font-weight:700;letter-spacing:.2px}
-.sub{margin:9px 0 22px;font-size:13.5px;color:var(--tx3);line-height:1.8}
+  background:var(--accent-soft);border-radius:999px;padding:3px 11px;margin-bottom:13px}
+h1{margin:0;font-size:20px;font-weight:700}
+.sub{margin:8px 0 18px;font-size:13px;color:var(--tx3);line-height:1.8}
 .sub b{color:var(--tx2);font-weight:600}
-.detect{font-size:14.5px;color:var(--tx);min-height:24px}
-.detect .dev{font-weight:600}
-.detect .ver{color:var(--accent);font-weight:600}
-.bar{height:3px;background:#eef0f3;border-radius:3px;overflow:hidden;margin:16px 0 22px}
-.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;
-  transition:width .1s linear}
-.btns{display:flex;flex-direction:column;gap:10px}
+.lines{border:1px solid var(--line2);border-radius:11px;overflow:hidden;margin-bottom:16px}
+.ln{display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:13px;
+  border-bottom:1px solid var(--line2);text-align:left;text-decoration:none;color:var(--tx2)}
+.ln:last-child{border-bottom:0}
+.ln:hover{background:#fafbfd}
+.ln .dot{width:7px;height:7px;border-radius:50%;background:#d5dae1;flex:none}
+.ln.ok .dot{background:var(--ok)}
+.ln.bad .dot{background:var(--bad)}
+.ln.best{background:#f4f9f7}
+.ln .nm{flex:1;color:var(--tx);font-weight:600}
+.ln .ms{font-variant-numeric:tabular-nums;color:var(--tx3);font-size:12.5px}
+.ln .tag{font-size:11px;background:var(--accent);color:#fff;border-radius:5px;padding:1px 6px}
+.bar{height:3px;background:#eef0f3;border-radius:3px;overflow:hidden;margin:2px 0 16px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .12s linear}
+.btns{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
 .go{display:block;padding:13px;border-radius:12px;background:var(--accent);color:#fff;
-  font-size:16px;font-weight:600;text-decoration:none}
-.go:active{opacity:.88}
+  font-size:16px;font-weight:600;text-decoration:none;opacity:.5;pointer-events:none;transition:opacity .2s}
+.go.ready{opacity:1;pointer-events:auto}
 .ghost{padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff;
-  font-size:14.5px;color:var(--tx2);cursor:pointer}
+  font-size:14px;color:var(--tx2);cursor:pointer}
 .ghost:hover{border-color:#c3cbd6;color:var(--tx)}
-.tip{margin:20px 0 0;font-size:12.5px;color:var(--tx3);line-height:1.85;text-align:left;
-  border-top:1px solid #f0f2f5;padding-top:14px}
+.tip{margin:0;font-size:12.5px;color:var(--tx3);line-height:1.85;text-align:left;
+  border-top:1px solid var(--line2);padding-top:13px}
 .tip b{color:var(--tx2);font-weight:600}
-.tip a{color:var(--accent);text-decoration:none}
-.link{display:inline-flex;gap:14px;margin-top:12px;font-size:12.5px}
-.link a{color:var(--tx3);text-decoration:none;border-bottom:1px dashed #d5dae1}
-.link a:hover{color:var(--accent);border-color:var(--accent)}
+.tip .warn{color:#854f0b}
+.lnk{display:inline-flex;gap:14px;margin-top:10px;font-size:12.5px}
+.lnk a{color:var(--tx3);text-decoration:none;border-bottom:1px dashed #d5dae1}
+.lnk a:hover{color:var(--accent);border-color:var(--accent)}
 </style>
 </head>
 <body>
 <div class="card">
   <div class="badge">全部文稿总库</div>
-  <h1>正在为你选择界面</h1>
+  <h1 id="hd">正在测速，选择最快线路</h1>
   <p class="sub"><b>2,582</b> 篇 · <b>646</b> 万字 · 6 个来源库 · 10 大类 · 60 细分</p>
+  <p class="sub" id="dev" style="margin:-10px 0 16px;font-size:12.5px"></p>
 
-  <div class="detect" id="detect">正在识别设备…</div>
+  <div class="lines" id="lines"></div>
   <div class="bar"><i id="bar"></i></div>
 
   <div class="btns">
-    <a class="go" id="go" href="#" rel="prefetch">进入文稿库</a>
-    <button class="ghost" id="swap">改用另一版</button>
+    <a class="go" id="go" href="#">进入文稿库</a>
+    <button class="ghost" id="swap" style="display:none">改用另一版界面</button>
   </div>
 
   <p class="tip" id="tip">
     <b>手机版</b>：单列列表，筛选收在左侧抽屉，支持全屏阅读与左边缘滑动返回。<br>
     <b>桌面版</b>：左侧常驻筛选栏，信息密度更高，支持 ←/→ 翻篇。<br>
-    首次打开需加载约 13MB（含全部正文原文），一般 3～10 秒，之后由浏览器缓存。
+    首次打开约 1.1MB（正文按需分片加载），一般 3～10 秒。<br>
+    <span class="warn">加速线经第三方 CDN 缓存，内容更新可能延迟数小时；点线路名可手动指定。</span>
   </p>
-  <div class="link">
-    <a href="#" id="reset" style="display:none">恢复自动识别</a>
-    <a href="https://cdn.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html">加载慢？切到加速线路</a>
-  </div>
+  <div class="lnk"><a href="#" id="reset" style="display:none">恢复自动选择</a></div>
 </div>
 
 <script>
 "use strict";
 (function(){
+  var REPO = "chenginko-cloud/wengao-library";
+  var LINES = [
+    {key:"gh",    name:"主线路 GitHub",     base:"https://chenginko-cloud.github.io/wengao-library/"},
+    {key:"jsd",   name:"加速线 ① jsDelivr", base:"https://cdn.jsdelivr.net/gh/" + REPO + "@main/"},
+    {key:"gcore", name:"加速线 ② Gcore",    base:"https://gcore.jsdelivr.net/gh/" + REPO + "@main/"}
+  ];
   var params = new URLSearchParams(location.search);
   var forced = params.get("v");
-  var saved  = null;
-  try { saved = localStorage.getItem("wengao-ver"); } catch(e){}
+  var savedVer = null, savedLine = null;
+  try {
+    savedVer  = localStorage.getItem("wengao-ver");
+    savedLine = localStorage.getItem("wengao-line");
+  } catch(e){}
 
+  /* ---------- 设备判定：UA 命中，或「窄屏 + 触摸」（桌面缩窗口不误判） ---------- */
   var ua = navigator.userAgent || "";
   var uaMobile = /Android|iPhone|iPod|iPad|Mobile|HarmonyOS|Tablet|Windows Phone/i.test(ua);
   var iPadOS   = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
   var touch    = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
   var narrow   = Math.min(screen.width || 9999, window.innerWidth || 9999) < 768;
-  /* 手机/平板判定：UA 命中，或「窄屏 + 触摸」——桌面浏览器把窗口拖窄不会被误判 */
   var isMobile = uaMobile || iPadOS || (narrow && touch);
 
-  var target, reason;
-  if(forced === "mobile" || forced === "desktop"){
-    target = forced;
-    reason = "链接参数指定";
+  var ver, reason;
+  if (forced === "mobile" || forced === "desktop") {
+    ver = forced; reason = "链接参数指定版本";
     try { localStorage.setItem("wengao-ver", forced); } catch(e){}
-  }else if(saved === "mobile" || saved === "desktop"){
-    target = saved;
-    reason = "你上次选择的版本";
-  }else{
-    target = isMobile ? "mobile" : "desktop";
+  } else if (savedVer === "mobile" || savedVer === "desktop") {
+    ver = savedVer; reason = "沿用你上次选择的版本";
+  } else {
+    ver = isMobile ? "mobile" : "desktop";
     reason = isMobile ? "识别为手机 / 平板" : "识别为电脑";
   }
-
   var FILE = { mobile:"mobile.html", desktop:"desktop.html" };
   var NAME = { mobile:"手机版", desktop:"桌面版" };
-  var other = target === "mobile" ? "desktop" : "mobile";
+  var other = ver === "mobile" ? "desktop" : "mobile";
+  document.getElementById("dev").innerHTML =
+    reason + "，将进入 <b>" + NAME[ver] + "</b>（点下面第二条按钮可切换）";
 
-  /* 预取目标页，减少跳转后的等待 */
-  (function(){
-    var l = document.createElement("link");
-    l.rel = "prefetch"; l.href = FILE[target]; l.as = "document";
-    document.head.appendChild(l);
-  })();
-
-  document.getElementById("detect").innerHTML =
-    reason + "，将进入 <span class=\"ver\">" + NAME[target] + "</span>";
-
-  var go = document.getElementById("go");
-  go.textContent = "进入" + NAME[target];
-  go.href = FILE[target];
-
-  var swap = document.getElementById("swap");
-  swap.textContent = "我其实要用" + NAME[other];
-  swap.onclick = function(){
-    try { localStorage.setItem("wengao-ver", other); } catch(e){}
-    location.href = FILE[other];
-  };
-
-  var reset = document.getElementById("reset");
-  if(saved){ 
-    reset.style.display = "inline-block";
-    reset.onclick = function(ev){
-      ev.preventDefault();
-      try { localStorage.removeItem("wengao-ver"); } catch(e){}
-      location.search = "";
-    };
+  /* ---------- 并发测速 ---------- */
+  function probe(base){
+    var t0 = performance.now();
+    var ctl = ("AbortController" in window) ? new AbortController() : null;
+    var timer = setTimeout(function(){ if (ctl) ctl.abort(); }, 6000);
+    return fetch(base + "index.html?_p=" + Date.now(),
+                 { mode:"no-cors", cache:"no-store", signal: ctl ? ctl.signal : undefined })
+      .then(function(){ clearTimeout(timer); return performance.now() - t0; })
+      .catch(function(){ clearTimeout(timer); return Infinity; });
   }
 
-  /* 手动点按钮 → 记住选择 */
-  go.addEventListener("click", function(){
-    try { localStorage.setItem("wengao-ver", target); } catch(e){}
-  });
+  var order = LINES.slice();
+  if (savedLine) order.sort(function(a,b){ return (b.key === savedLine) - (a.key === savedLine); });
 
-  /* 自动跳转：进度条 1.6 秒后进入；想换版本可点上面按钮或「改用另一版」 */
-  var bar = document.getElementById("bar"), t0 = Date.now(), DUR = 1600;
-  var timer = setInterval(function(){
-    var p = Math.min(1, (Date.now() - t0) / DUR);
-    bar.style.width = (p * 100) + "%";
-    if(p >= 1){ clearInterval(timer); location.href = FILE[target]; }
-  }, 40);
+  var hostEl = document.getElementById("lines");
+  hostEl.innerHTML = order.map(function(l){
+    return '<a class="ln" data-k="' + l.key + '" href="#">' +
+           '<i class="dot"></i><span class="nm">' + l.name + '</span>' +
+           '<span class="ms" id="ms-' + l.key + '">测速中…</span></a>';
+  }).join("");
+
+  var results = {};
+  Promise.all(order.map(function(l){
+    return probe(l.base).then(function(ms){
+      results[l.key] = ms;
+      var el = document.getElementById("ms-" + l.key);
+      var row = hostEl.querySelector('.ln[data-k="' + l.key + '"]');
+      if (el) el.textContent = isFinite(ms) ? (ms | 0) + " ms" : "不可用";
+      if (row) row.classList.add(isFinite(ms) ? "ok" : "bad");
+      return { key:l.key, ms:ms };
+    });
+  })).then(function(all){
+    var usable = all.filter(function(x){ return isFinite(x.ms); });
+    usable.sort(function(a,b){ return a.ms - b.ms; });
+    var best = usable.length ? usable[0].key : "gh";
+    if (savedLine && isFinite(results[savedLine])) best = savedLine;   // 用户指定过就尊重
+    var bestLine = null;
+    LINES.forEach(function(l){ if (l.key === best) bestLine = l; });
+
+    var row = hostEl.querySelector('.ln[data-k="' + best + '"]');
+    if (row) {
+      row.classList.add("best");
+      row.insertAdjacentHTML("beforeend", '<span class="tag">已选中</span>');
+    }
+    document.getElementById("hd").textContent = "将走「" + bestLine.name + "」";
+
+    var go = document.getElementById("go");
+    go.textContent = "进入" + NAME[ver];
+    go.href = bestLine.base + FILE[ver];
+    go.classList.add("ready");
+    go.onclick = function(){
+      try { localStorage.setItem("wengao-ver", ver); localStorage.setItem("wengao-line", best); } catch(e){}
+    };
+
+    var swap = document.getElementById("swap");
+    swap.style.display = "block";
+    swap.textContent = "我其实要用" + NAME[other];
+    swap.onclick = function(){
+      try { localStorage.setItem("wengao-ver", other); localStorage.setItem("wengao-line", best); } catch(e){}
+      location.href = bestLine.base + FILE[other];
+    };
+
+    /* 点某条线路 → 手动锁定它 */
+    Array.prototype.forEach.call(hostEl.querySelectorAll(".ln"), function(a){
+      a.onclick = function(ev){
+        ev.preventDefault();
+        var k = a.dataset.k;
+        if (!isFinite(results[k])) return;
+        try { localStorage.setItem("wengao-line", k); localStorage.setItem("wengao-ver", ver); } catch(e){}
+        var t = null;
+        LINES.forEach(function(l){ if (l.key === k) t = l; });
+        location.href = t.base + FILE[ver];
+      };
+    });
+
+    var reset = document.getElementById("reset");
+    if (savedLine) {
+      reset.style.display = "inline-block";
+      reset.onclick = function(ev){
+        ev.preventDefault();
+        try { localStorage.removeItem("wengao-line"); } catch(e){}
+        location.search = "";
+      };
+    }
+
+    /* 进度条 1.4 秒后自动进入 */
+    var bar = document.getElementById("bar"), t1 = Date.now();
+    var timer = setInterval(function(){
+      var p = Math.min(1, (Date.now() - t1) / 1400);
+      bar.style.width = (p * 100) + "%";
+      if (p >= 1) { clearInterval(timer); location.href = go.href; }
+    }, 40);
+  });
 })();
 </script>
 </body>

@@ -4,14 +4,18 @@
 
 ## 线上地址
 
-| 入口 | 地址 | 说明 |
+| 线路 | 地址 | 说明 |
 |---|---|---|
-| 自动分流（推荐） | https://chenginko-cloud.github.io/wengao-library/ | 按设备自动进手机版或桌面版 |
-| 强制桌面版 | https://chenginko-cloud.github.io/wengao-library/?v=desktop | 手机也能看桌面版 |
-| 强制手机版 | https://chenginko-cloud.github.io/wengao-library/?v=mobile | |
-| jsDelivr 加速线 | https://cdn.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | 国内实测快 3 倍以上 |
+| **入口（推荐）** | https://chenginko-cloud.github.io/wengao-library/ | **自动测速选最快线路**，并按设备分流到手机版 / 桌面版 |
+| 主线路 | `…/wengao-library/` | GitHub Pages |
+| 加速线 ① | https://cdn.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | jsDelivr（国内实测常快 3 倍以上） |
+| 加速线 ② | https://gcore.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | Gcore CDN 节点，实测最稳（约 100 KB/s+） |
+| 强制桌面版 | 任一线路地址后加 `?v=desktop` | 手机也能看桌面版 |
+| 强制手机版 | 任一线路地址后加 `?v=mobile` | |
 
-入口页会记住你的手动选择（存 localStorage），链接里加 `?v=desktop` / `?v=mobile` 可随时覆盖。
+入口页会**并发测速三条线路**（各拉一次 6.8KB 的 index.html），自动走最快的那条，并记住你的选择：
+手动点某条线路可锁定它（右下角「恢复自动选择」可取消）；版本选择同样存 localStorage，`?v=` 参数可随时覆盖。
+加速线经第三方 CDN 缓存，内容更新可能延迟数小时。
 
 ## 目录结构
 
