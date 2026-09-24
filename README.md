@@ -4,19 +4,14 @@
 
 ## 线上地址
 
-| 线路 | 地址 | 说明 |
+| 入口 | 地址 | 说明 |
 |---|---|---|
-| **入口（推荐）** | https://chenginko-cloud.github.io/wengao-library/ | **自动测速选最快线路**，并按设备分流到手机版 / 桌面版 |
-| 主线路 | `…/wengao-library/` | GitHub Pages |
-| 加速线 ① | https://cdn.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | jsDelivr（国内实测常快 3 倍以上） |
-| 加速线 ② | https://gcore.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | Gcore CDN 节点，实测最稳（约 100 KB/s+） |
-| 强制桌面版 | 任一线路地址后加 `?v=desktop` | 手机也能看桌面版 |
-| 强制手机版 | 任一线路地址后加 `?v=mobile` | |
+| 自动分流（推荐） | https://chenginko-cloud.github.io/wengao-library/ | 按设备自动进手机版或桌面版 |
+| 强制桌面版 | https://chenginko-cloud.github.io/wengao-library/?v=desktop | 手机也能看桌面版 |
+| 强制手机版 | https://chenginko-cloud.github.io/wengao-library/?v=mobile | |
+| jsDelivr 加速线 | https://cdn.jsdelivr.net/gh/chenginko-cloud/wengao-library@main/index.html | 国内实测快 3 倍以上 |
 
-入口页会**并发测速三条线路**（各拉一次 6.8KB 的 index.html），自动走最快的那条，并记住你的选择：
-手动点某条线路可锁定它（右下角「恢复自动选择」可取消）；版本选择同样存 localStorage，`?v=` 参数可随时覆盖。
-加速线经第三方 CDN 缓存，内容更新可能延迟数小时；其中 **Gcore 的入口页缓存较难刷新**，
-走加速线时建议直接打开 `…@main/mobile.html` 或 `…@main/desktop.html`（分片会从同域加载，内容始终最新）。
+入口页会记住你的手动选择（存 localStorage），链接里加 `?v=desktop` / `?v=mobile` 可随时覆盖。
 
 ## 目录结构
 
@@ -28,8 +23,6 @@ feed/f00.js…    正文分片（共 30 片，每片约 400KB）
 ```
 
 两份界面是独立编写的，不是同一套响应式布局。
-
-**标点补全**：教育博主文稿库的 483 篇口播稿原为无标点转写稿（标点密度 0.040，正常中文约 0.11），已逐篇重补标点并修正原稿的错误断句，密度提升至 0.110；补标点过程中**未改动任何一个原文用字**（逐篇校验汉字序列完全一致）。
 
 **正文按需加载**：首屏只下载元数据（标题/作者/主题/标签/字数/摘要，约 1.1MB），点开某篇文章时才拉取包含它的那一片正文；
 同一分片内翻篇不重复下载。勾选「含正文全文搜索」会一次性加载全部分片（约 12MB），结果会缓存。
