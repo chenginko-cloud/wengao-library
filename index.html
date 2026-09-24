@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>全部文稿总库 · 正在进入…</title>
+<style>
+:root{--tx:#1f2328;--tx2:#5c6570;--tx3:#8b95a1;--line:#e5e7eb;--accent:#2b5cd9;--accent-soft:#eaf0ff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:#f4f5f7;color:var(--tx);display:flex;align-items:center;justify-content:center;
+  padding:24px;min-height:100%;
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.card{
+  width:100%;max-width:440px;background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:30px 26px 24px;box-shadow:0 10px 34px rgba(16,24,40,.07);text-align:center;
+}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.6px;color:var(--accent);
+  background:var(--accent-soft);border-radius:999px;padding:3px 11px;margin-bottom:14px}
+h1{margin:0;font-size:21px;font-weight:700;letter-spacing:.2px}
+.sub{margin:9px 0 22px;font-size:13.5px;color:var(--tx3);line-height:1.8}
+.sub b{color:var(--tx2);font-weight:600}
+.detect{font-size:14.5px;color:var(--tx);min-height:24px}
+.detect .dev{font-weight:600}
+.detect .ver{color:var(--accent);font-weight:600}
+.bar{height:3px;background:#eef0f3;border-radius:3px;overflow:hidden;margin:16px 0 22px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:3px;
+  transition:width .1s linear}
+.btns{display:flex;flex-direction:column;gap:10px}
+.go{display:block;padding:13px;border-radius:12px;background:var(--accent);color:#fff;
+  font-size:16px;font-weight:600;text-decoration:none}
+.go:active{opacity:.88}
+.ghost{padding:11px;border:1px solid var(--line);border-radius:12px;background:#fff;
+  font-size:14.5px;color:var(--tx2);cursor:pointer}
+.ghost:hover{border-color:#c3cbd6;color:var(--tx)}
+.tip{margin:20px 0 0;font-size:12.5px;color:var(--tx3);line-height:1.85;text-align:left;
+  border-top:1px solid #f0f2f5;padding-top:14px}
+.tip b{color:var(--tx2);font-weight:600}
+.tip a{color:var(--accent);text-decoration:none}
+.link{display:inline-flex;gap:14px;margin-top:12px;font-size:12.5px}
+.link a{color:var(--tx3);text-decoration:none;border-bottom:1px dashed #d5dae1}
+.link a:hover{color:var(--accent);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">全部文稿总库</div>
+  <h1>正在为你选择界面</h1>
+  <p class="sub"><b>2,582</b> 篇 · <b>646</b> 万字 · 6 个来源库 · 10 大类 · 60 细分</p>
+
+  <div class="detect" id="detect">正在识别设备…</div>
+  <div class="bar"><i id="bar"></i></div>
+
+  <div class="btns">
+    <a class="go" id="go" href="#" rel="prefetch">进入文稿库</a>
+    <button class="ghost" id="swap">改用另一版</button>
+  </div>
+
+  <p class="tip" id="tip">
+    <b>手机版</b>：单列列表，筛选收在左侧抽屉，支持全屏阅读与左边缘滑动返回。<br>
+    <b>桌面版</b>：左侧常驻筛选栏，信息密度更高，支持 ←/→ 翻篇。<br>
+    首次打开需加载约 13MB（含全部正文原文），一般 3～10 秒，之后由浏览器缓存。
+  </p>
+  <div class="link"><a href="#" id="reset" style="display:none">恢复自动识别</a></div>
+</div>
+
+<script>
+"use strict";
+(function(){
+  var params = new URLSearchParams(location.search);
+  var forced = params.get("v");
+  var saved  = null;
+  try { saved = localStorage.getItem("wengao-ver"); } catch(e){}
+
+  var ua = navigator.userAgent || "";
+  var uaMobile = /Android|iPhone|iPod|iPad|Mobile|HarmonyOS|Tablet|Windows Phone/i.test(ua);
+  var iPadOS   = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+  var touch    = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+  var narrow   = Math.min(screen.width || 9999, window.innerWidth || 9999) < 768;
+  /* 手机/平板判定：UA 命中，或「窄屏 + 触摸」——桌面浏览器把窗口拖窄不会被误判 */
+  var isMobile = uaMobile || iPadOS || (narrow && touch);
+
+  var target, reason;
+  if(forced === "mobile" || forced === "desktop"){
+    target = forced;
+    reason = "链接参数指定";
+    try { localStorage.setItem("wengao-ver", forced); } catch(e){}
+  }else if(saved === "mobile" || saved === "desktop"){
+    target = saved;
+    reason = "你上次选择的版本";
+  }else{
+    target = isMobile ? "mobile" : "desktop";
+    reason = isMobile ? "识别为手机 / 平板" : "识别为电脑";
+  }
+
+  var FILE = { mobile:"mobile.html", desktop:"desktop.html" };
+  var NAME = { mobile:"手机版", desktop:"桌面版" };
+  var other = target === "mobile" ? "desktop" : "mobile";
+
+  /* 预取目标页，减少跳转后的等待 */
+  (function(){
+    var l = document.createElement("link");
+    l.rel = "prefetch"; l.href = FILE[target]; l.as = "document";
+    document.head.appendChild(l);
+  })();
+
+  document.getElementById("detect").innerHTML =
+    reason + "，将进入 <span class=\"ver\">" + NAME[target] + "</span>";
+
+  var go = document.getElementById("go");
+  go.textContent = "进入" + NAME[target];
+  go.href = FILE[target];
+
+  var swap = document.getElementById("swap");
+  swap.textContent = "我其实要用" + NAME[other];
+  swap.onclick = function(){
+    try { localStorage.setItem("wengao-ver", other); } catch(e){}
+    location.href = FILE[other];
+  };
+
+  var reset = document.getElementById("reset");
+  if(saved){ 
+    reset.style.display = "inline-block";
+    reset.onclick = function(ev){
+      ev.preventDefault();
+      try { localStorage.removeItem("wengao-ver"); } catch(e){}
+      location.search = "";
+    };
+  }
+
+  /* 手动点按钮 → 记住选择 */
+  go.addEventListener("click", function(){
+    try { localStorage.setItem("wengao-ver", target); } catch(e){}
+  });
+
+  /* 自动跳转：进度条 1.6 秒后进入；想换版本可点上面按钮或「改用另一版」 */
+  var bar = document.getElementById("bar"), t0 = Date.now(), DUR = 1600;
+  var timer = setInterval(function(){
+    var p = Math.min(1, (Date.now() - t0) / DUR);
+    bar.style.width = (p * 100) + "%";
+    if(p >= 1){ clearInterval(timer); location.href = FILE[target]; }
+  }, 40);
+})();
+</script>
+</body>
+</html>
